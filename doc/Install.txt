@@ -1,0 +1,77 @@
+Please also watch the installation video's linked on the BBOS homepage where
+you downloaded these files.
+
+- Download and install MySQL (any version)
+   http://dev.mysql.com/
+   Using MySQL 5.5 will save you a step later
+   Keep track of the directory you choose to install MySQL in during the install
+   If possible, create a MySQL user for BBOS during the installation, see below
+   In some installations you must check "Allow MySQL to be in your Windows PATH"
+   You DO NOT need have the install add a firewall rule to run BBOS, it is up to you.
+   If you would like to use your own user/password settings you must update the config file*.
+   Alternatively you may run any other MySQL instance you like including WAMP servers
+
+- Create a MySQL user named "bbos" with password "bbos"
+  Give the user DBA privileges (Database Administrator) 
+  Otherwise BBOS can't create your schema and tables to put the Gameday data in
+
+- If you use a version of MySQL other then 5.5 or select a directory to
+  install to other then the default you will have to change the location
+  of MySQL in the BBOS config file referenced below.*  
+  The current setting is:
+  mySQLLocation = 'C:\\Program Files\\MySQL\\MySQL Server 5.5\\bin'
+  in the file
+  <install directory>\BBOS\src\bbos\config\bbosConfig.py
+  
+- Download and install Python 2.7 from http://www.python.org/
+   BBOS will not work with 3.x versions of Python
+
+- The following commands are run at a dos prompt from the directory you
+  installed BBOS to
+- Install the other Python modules BBOS uses by running:
+  <install directory>\BBOS\src\installPythonLibs.py
+
+- Open a DOS prompt window at Start->Programs->Accessories->Command Prompt
+- Change directory to the location you have installed BBOS
+- Install the database schemas to hold game information by running
+  <install directory>\BBOS\src\createGamedaySchema.py
+  <install directory>\BBOS\src\createRetrosheetSchema.py
+
+- Read the help directions by running
+   <install directory>\BBOS\src\bbos.py -h
+   
+- Load games into the database by running a load command on the bbos.py file**
+   <install directory>\BBOS\src\bbos.py -r
+   <install directory>\BBOS\src\bbos.py -y 2008
+   or to load retrosheet data
+   <install directory>\BBOS\src\retrosheet.py -y 2012
+   
+- Loading a year takes over an hour for either dataset, 
+  if you choose these options be prepared to return later.
+
+- By default bbos.py will load MLB data.  To load minor league data you
+  must pass in the league you would like to load data for.
+  <install directory>\BBOS\src\bbos.py aaa -r
+  Minor leagues published by MLB which have data at the time of publication:
+  'MLB','AAA','AAX','AFA','AFX','ASX','ROK','WIN'
+   
+- Congratulations, you now have a Gameday Pitch F/X and MLB player database.  
+
+- If you wish the database to stay continually up to date feel free to schedule 
+    "bbos.py -r" to run nightly via Windows or your favorite scheduling tool.
+
+- If you wish to load player biographical information run a player bio load script 
+   <install directory>\BBOS\src\bbosPlayerBio.py
+   All options available to bbos.py are available to the bio script
+
+- Go forth and prosper.  Ask questions of your database.
+
+*Advanced options such as using you own MySQL configuration are found at
+    <install directory>\BBOS\src\bbos\config\bbosConfig.py
+    
+**If a load fails mid way and you feel a game's data has not been completely
+    loaded you can remove all the data for a particular game by running
+      <install directory>\BBOS\src\deleteBBOSGame.py gid_2008_03_21_balmlb_slnmlb_1
+    supplying the game name you would like removed
+  If rerun, a load script will start at the first game it finds no data has yet 
+  been loaded for.

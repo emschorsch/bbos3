@@ -1,0 +1,45 @@
+#proxy for current DB implementation and provides logging
+from bbos.config.gamedayConfig import GamedayConfig
+from mySQL.mySQLCommand import MySQLCommander
+from mySQL.mySQLConnection import MySQLConnection
+from _mysql_exceptions import MySQLError
+import logging
+from exceptions import Warning
+
+class DB:
+    def __init__(self):
+        self.mySQLCommander = MySQLCommander(GamedayConfig.mySQLLocation, GamedayConfig.dbUser, GamedayConfig.dbPass)
+        self.db = MySQLConnection(GamedayConfig.dbUser, GamedayConfig.dbPass, GamedayConfig.dbHost, GamedayConfig.dbPort, GamedayConfig.dbName);
+    
+    def run(self, sqlFile):
+        command = self.mySQLCommander.createMySQLCommand(sqlFile)
+        logging.debug("running:" + command.getCommand())
+        
+        self.mySQLCommander.run(command)
+        logging.debug("complete")
+        
+    def execute(self, sql):
+        self.logStatement(sql)
+        
+        try:
+            self.db.execute(sql)
+        except Warning as w:
+            raise SQLException
+        except MySQLError as e:
+            raise SQLException
+        
+    def logStatement(self, sql):
+        logging.debug("BEGIN mySQL Statement:\n  %s\nEND Statement" % (sql))
+    
+    def select(self, sql):
+        self.logStatement(sql)
+        
+        return self.db.select(sql)
+
+
+class SQLException(Exception):
+    def _get_message(self, message): 
+        return self._message
+    def _set_message(self, message): 
+        self._message = message
+    message = property(_get_message, _set_message)
