@@ -27,4 +27,4 @@ class GamedayConfig:
 
     parser_pregumbo_hit = ['angle', 'direction', 'distance', 'play_guid', 'speed'];
     
-    parser_feed_plays = ['description', 'player_id', 'mph', 'distance', 'launch_angle', 'result']
+    parser_feed_plays = ['description', 'player_id', 'mph', 'distance', 'launch_angle', 'result', 'time_tfs']
